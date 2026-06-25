@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd todo-app && npm install && npm run build",
+  "outputDirectory": "todo-app/dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
