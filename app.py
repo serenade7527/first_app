@@ -63,21 +63,27 @@ st.sidebar.markdown("---")
 
 st.markdown("# 💰 가계부 대시보드")
 
-# ── 업로드 전 안내 ────────────────────────────────────────────
-if not uploaded:
+# ── 파일 로드 (업로드 없으면 기본 데이터 자동 표시) ──────────
+import os
+DEFAULT_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "가계부_2024_더미데이터.xlsx")
+
+if uploaded:
+    source = uploaded
+    st.sidebar.success("✅ 업로드 파일 사용 중")
+elif os.path.exists(DEFAULT_FILE):
+    source = DEFAULT_FILE
+    st.sidebar.info("📂 기본 샘플 데이터 표시 중")
+else:
     st.markdown("""
     <div class="upload-hint">
         <h2>📂 가계부 엑셀 파일을 업로드하세요</h2>
         <p>왼쪽 사이드바에서 파일을 업로드하면 대시보드가 자동으로 표시됩니다.</p>
-        <br>
-        <p>필요한 컬럼: <strong>날짜 · 구분 · 카테고리 · 항목 · 금액(원) · 결제수단</strong></p>
     </div>
     """, unsafe_allow_html=True)
     st.stop()
 
-# ── 파일 로드 ─────────────────────────────────────────────────
 try:
-    df = pd.read_excel(uploaded)
+    df = pd.read_excel(source)
 except Exception as e:
     st.error(f"파일을 읽을 수 없습니다: {e}")
     st.stop()
